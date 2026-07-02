@@ -25,17 +25,15 @@ git clone [https://github.com/Alderesu/cse340-course-repo.git](https://github.co
 ### 2. Install Dependencies
 Navigate into the project directory and install the required Node packages:
 
-npm install
-
 ```
+npm install
 ```
 
 ### 3. Run the Development Server
 To start the local backend server, execute:
 
-npm start
-
 ```
+npm start
 ```
 
 Core Features & Environment
@@ -44,9 +42,6 @@ Backend Runtime: Node.js environment handling server-side logic.
 Database Management: Structured PostgreSQL integration managed via PG Admin.
 
 Version Control: Managed cleanly with a Node-specific .gitignore to keep local dependencies (node_modules) out of the repository.
-
-```
-```
 
 Author
 Kyle Aldrich Moran (GitHub: @Alderesu)
