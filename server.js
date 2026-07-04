@@ -1,43 +1,53 @@
-/* ******************************************
- * This server.js file is the primary file of the 
- * application. It is used to control the project.
- *******************************************/
-/* ***********************
- * Require Statements
- *************************/
-const express = require("express")
-const expressLayouts = require("express-ejs-layouts")
-const env = require("dotenv").config()
-const app = express()
-const static = require("./routes/static")
+import express from 'express';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-/* ***********************
- * View Engine and Templates
- *************************/
-app.set("view engine", "ejs")
-app.set('views', './views');
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+// Define the application environment
+const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
-/* ***********************
- * Routes
- *************************/
-app.use(require("./routes/static"))
-// Index route
-app.get("/", function(req, res){
-  res.render("index", {title: "Home"})
-})
+// Define the port number the server will listen on
+const PORT = process.env.PORT || 3000;
 
-/* ***********************
- * Local Server Information
- * Values from .env (environment) file
- *************************/
-const port = process.env.PORT
-const host = process.env.HOST
+const app = express();
 
-/* ***********************
- * Log statement to confirm server operation
- *************************/
-app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
-})
+app.listen(PORT, () => {
+  console.log(`Server is running at http://127.0.0.1:${PORT}`);
+  console.log(`Environment: ${NODE_ENV}`);
+});
+
+// code to create the __dirname and __filename variables:
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+  * Configure Express middleware
+  */
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Set EJS as the templating engine
+app.set('view engine', 'ejs');
+
+// Tell Express where to find your templates
+app.set('views', path.join(__dirname, 'src/views'));
+
+/**
+  * Routes
+  */
+
+//Because html files are not in the public directory
+app.get('/', async (req, res) => {
+    const title = 'Home';
+    res.render('home', { title });
+});
+
+app.get('/organizations', async (req, res) => {
+    const title = 'Our Partner Organizations';
+    res.render('organizations', { title });
+});
+
+app.get('/projects', async (req, res) => {
+    const title = 'Service Projects';
+    res.render('projects', { title });
+});
