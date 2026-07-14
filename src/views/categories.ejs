@@ -3,22 +3,11 @@
     <h1><%= title %></h1>
     <p>Browse the different categories of service opportunities available across our network.</p>
     <ul class="card-grid">
-        <li class="card">
-            <h2>Environmental</h2>
-            <p>Protect and restore the natural world through cleanups, planting, and conservation.</p>
-        </li>
-        <li class="card">
-            <h2>Educational</h2>
-            <p>Support learning through tutoring, mentoring, and literacy programs.</p>
-        </li>
-        <li class="card">
-            <h2>Community Service</h2>
-            <p>Strengthen neighborhoods with local projects that bring people together.</p>
-        </li>
-        <li class="card">
-            <h2>Health and Wellness</h2>
-            <p>Promote healthy living through wellness drives and community care.</p>
-        </li>
+        <% categories.forEach(category => { %>
+            <li class="card">
+                <h2><%= category.name %></h2>
+            </li>
+        <% }); %>
     </ul>
 </main>
 <%- include('partials/footer') %>
