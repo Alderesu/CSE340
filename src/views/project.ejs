@@ -10,6 +10,11 @@
         <a href="/organization/<%= projectDetails.organization_id %>"><%= projectDetails.organization_name %></a>
     </p>
 
+    <p>
+        <a href="/edit-project/<%= projectDetails.project_id %>">Edit Project</a> |
+        <a href="/assign-categories/<%= projectDetails.project_id %>">Edit Categories</a>
+    </p>
+
     <h3>Categories</h3>
     <ul class="tag-list">
         <% categories.forEach(category => { %>

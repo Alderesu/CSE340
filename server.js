@@ -1,7 +1,9 @@
 import express from 'express';
+import session from 'express-session';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './src/models/db.js';
+import flash from './src/middleware/flash.js';
 import router from './src/routes.js';
 
 // Define the application environment
@@ -9,6 +11,9 @@ const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
 // Define the port number the server will listen on
 const PORT = process.env.PORT || 3000;
+
+// Session secret from environment variables
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 // Create the __dirname and __filename variables
 const __filename = fileURLToPath(import.meta.url);
@@ -19,6 +24,21 @@ const app = express();
 /**
   * Configure Express middleware
   */
+
+// Set up session management (in-memory store for now)
+app.use(session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
+}));
+
+// Flash message middleware (must run after session)
+app.use(flash);
+
+// Allow Express to receive and process common POST data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,7 +54,7 @@ app.use((req, res, next) => {
     if (NODE_ENV === 'development') {
         console.log(`${req.method} ${req.url}`);
     }
-    next(); // Pass control to the next middleware or route
+    next();
 });
 
 // Middleware to make NODE_ENV available to all templates
@@ -55,22 +75,18 @@ app.use((req, res, next) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-    // Log error details for debugging
     console.error('Error occurred:', err.message);
     console.error('Stack trace:', err.stack);
 
-    // Determine status and template
     const status = err.status || 500;
     const template = status === 404 ? '404' : '500';
 
-    // Prepare data for the template
     const context = {
         title: status === 404 ? 'Page Not Found' : 'Server Error',
         error: err.message,
         stack: err.stack
     };
 
-    // Render the appropriate error template
     res.status(status).render(`errors/${template}`, context);
 });
 

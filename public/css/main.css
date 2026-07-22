@@ -146,6 +146,66 @@ main > ul:not(.card-grid) li {
     margin-top: 0;
 }
 
+/* ---------- Forms ---------- */
+.form-group {
+    margin-bottom: 1rem;
+    max-width: 560px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--color-text);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover,
+button[type="submit"]:focus {
+    background: var(--color-primary-dark);
+}
+
+/* ---------- Flash / alert messages ---------- */
+.alert {
+    max-width: var(--max-width);
+    margin: 1rem auto 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+}
+.alert.success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+.alert.error   { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.alert.warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
+.alert.info    { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
+
 /* ---------- Category tags ---------- */
 .tag-list {
     list-style: none;
