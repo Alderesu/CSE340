@@ -1,14 +1,12 @@
 import db from './db.js';
 
 /**
- * Gets all service projects along with the name of the organization
- * that sponsors each one. The INNER JOIN links each project to its
- * organization using the organization_id foreign key.
+ * Gets all service projects along with the name of the sponsoring organization.
  */
 const getAllProjects = async () => {
     const query = `
         SELECT p.project_id, p.title, p.description, p.location, p.project_date,
-               o.name AS organization_name
+               p.organization_id, o.name AS organization_name
         FROM public.project AS p
         INNER JOIN public.organization AS o
             ON p.organization_id = o.organization_id
@@ -20,4 +18,68 @@ const getAllProjects = async () => {
     return result.rows;
 };
 
-export { getAllProjects };
+/**
+ * Gets the next N upcoming service projects (date today or later),
+ * along with the sponsoring organization name.
+ */
+const getUpcomingProjects = async (numberOfProjects) => {
+    const query = `
+        SELECT p.project_id, p.title, p.description, p.location, p.project_date,
+               p.organization_id, o.name AS organization_name
+        FROM public.project AS p
+        INNER JOIN public.organization AS o
+            ON p.organization_id = o.organization_id
+        WHERE p.project_date >= CURRENT_DATE
+        ORDER BY p.project_date ASC
+        LIMIT $1;
+    `;
+
+    const queryParams = [numberOfProjects];
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
+
+/**
+ * Gets the details of a single service project by its ID,
+ * along with the sponsoring organization name.
+ */
+const getProjectDetails = async (id) => {
+    const query = `
+        SELECT p.project_id, p.title, p.description, p.location, p.project_date,
+               p.organization_id, o.name AS organization_name
+        FROM public.project AS p
+        INNER JOIN public.organization AS o
+            ON p.organization_id = o.organization_id
+        WHERE p.project_id = $1;
+    `;
+
+    const queryParams = [id];
+    const result = await db.query(query, queryParams);
+
+    return result.rows.length > 0 ? result.rows[0] : null;
+};
+
+/**
+ * Gets all service projects sponsored by a specific organization.
+ */
+const getProjectsByOrganizationId = async (organizationId) => {
+    const query = `
+        SELECT project_id, organization_id, title, description, location, project_date
+        FROM public.project
+        WHERE organization_id = $1
+        ORDER BY project_date;
+    `;
+
+    const queryParams = [organizationId];
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
+
+export {
+    getAllProjects,
+    getUpcomingProjects,
+    getProjectDetails,
+    getProjectsByOrganizationId
+};
