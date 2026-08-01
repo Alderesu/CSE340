@@ -6,11 +6,15 @@
         <% categories.forEach(category => { %>
             <li class="card">
                 <h2><a href="/category/<%= category.category_id %>"><%= category.name %></a></h2>
-                <p><a href="/edit-category/<%= category.category_id %>">Edit</a></p>
+                <% if (user && user.role_name === 'admin') { %>
+                    <p><a href="/edit-category/<%= category.category_id %>">Edit</a></p>
+                <% } %>
             </li>
         <% }); %>
     </ul>
 
-    <p><a href="/new-category">Add a new category</a></p>
+    <% if (user && user.role_name === 'admin') { %>
+        <p><a href="/new-category">Add a new category</a></p>
+    <% } %>
 </main>
 <%- include('partials/footer') %>
