@@ -5,6 +5,7 @@
 -- ============================================================
 
 -- Drop in reverse dependency order so the script can be re-run safely
+DROP TABLE IF EXISTS project_volunteer;
 DROP TABLE IF EXISTS project_category;
 DROP TABLE IF EXISTS project;
 DROP TABLE IF EXISTS category;
@@ -164,4 +165,23 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     role_id INTEGER REFERENCES roles(role_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================================
+-- Project_Volunteer Junction Table (Week 06)
+-- A user can volunteer for many projects, and a project can have
+-- many volunteers (many-to-many). Composite PK prevents duplicate signups.
+-- ========================================
+CREATE TABLE project_volunteer (
+    user_id INTEGER NOT NULL,
+    project_id INTEGER NOT NULL,
+    CONSTRAINT pk_project_volunteer PRIMARY KEY (user_id, project_id),
+    CONSTRAINT fk_pv_user
+        FOREIGN KEY (user_id)
+        REFERENCES users (user_id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_pv_project
+        FOREIGN KEY (project_id)
+        REFERENCES project (project_id)
+        ON DELETE CASCADE
 );

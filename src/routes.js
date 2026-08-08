@@ -17,6 +17,8 @@ import {
     processNewProjectForm,
     showEditProjectForm,
     processEditProjectForm,
+    volunteerForProject,
+    removeVolunteerFromProject,
     projectValidation
 } from './controllers/projects.js';
 import {
@@ -74,6 +76,11 @@ router.get('/new-project', requireRole('admin'), showNewProjectForm);
 router.post('/new-project', requireRole('admin'), projectValidation, processNewProjectForm);
 router.get('/edit-project/:id', requireRole('admin'), showEditProjectForm);
 router.post('/edit-project/:id', requireRole('admin'), projectValidation, processEditProjectForm);
+
+// Volunteer sign-up / removal (any logged-in user)
+router.get('/project/:id/volunteer', requireLogin, volunteerForProject);
+router.get('/project/:id/unvolunteer', requireLogin, removeVolunteerFromProject);
+
 router.get('/project/:id', showProjectDetailsPage);
 
 // ---------- Assign categories to a project (admin-only) ----------

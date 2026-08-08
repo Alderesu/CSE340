@@ -17,6 +17,17 @@
         </p>
     <% } %>
 
+    <% if (isLoggedIn) { %>
+        <p class="volunteer-box">
+            <% if (isVolunteering) { %>
+                <strong>You are volunteering for this project.</strong>
+                <a href="/project/<%= projectDetails.project_id %>/unvolunteer">Remove me as a volunteer</a>
+            <% } else { %>
+                <a href="/project/<%= projectDetails.project_id %>/volunteer">Volunteer for this project</a>
+            <% } %>
+        </p>
+    <% } %>
+
     <h3>Categories</h3>
     <ul class="tag-list">
         <% categories.forEach(category => { %>
